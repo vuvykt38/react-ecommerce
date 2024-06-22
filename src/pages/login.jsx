@@ -29,7 +29,7 @@ export const Login = () => {
   };
 
   const checkLoginState = () => {
-    FB.getLoginStatus((response) => {
+    window.FB.getLoginStatus((response) => {
       statusChangeCallback(response);
     });
     console.log('checkLoginState done')
