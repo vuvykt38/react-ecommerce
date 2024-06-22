@@ -23,11 +23,33 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
   <title>React App</title>
+  <script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '1132159571217150',
+        cookie: true,
+        xfbml: true,
+        version: 'v20.0'
+      });
+    };
+
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v20.0&appId=1132159571217150"
+    nonce="yqG4fzgb"></script>
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -59,37 +81,4 @@
 <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1140223920585834&ev=PageView&noscript=1" /></noscript>
 <!-- End Meta Pixel Code -->
-
-<script>
-  window.fbAsyncInit = function () {
-    FB.init({
-      appId: '1132159571217150',
-      cookie: true,
-      xfbml: true,
-      version: 'v20.0'
-    });
-
-    FB.login(function (response) {
-      if (response.authResponse) {
-        console.log('Welcome!  Fetching your information.... ');
-        FB.api('/me', { fields: 'name, email' }, function (response) {
-          console.log("Good to see you, " + response.name + ". I see your email address is " + response.email);
-        });
-      } else {
-        // If you are not logged in, the login dialog will open for you to login asking for permission to get your public profile and email
-        console.log('User cancelled login or did not fully authorize.');
-      }
-    });
-  };
-
-  (function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) { return; }
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-</script>
-
-
 </html>
