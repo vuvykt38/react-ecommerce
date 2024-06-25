@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from "../context/user-context";
+
 
 export const Login = () => {
-  const [user, setUser] = useState({});
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const loginWithServer = async (accessToken) => {
