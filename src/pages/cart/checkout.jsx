@@ -1,18 +1,34 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { ShopContext } from "../../context/shop-context";
 import { UserContext } from '../../context/user-context';
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-    const { cart } = useContext(ShopContext);
-    const { user } = useContext(UserContext);
+    const { cart, setCart, getDefaultCart, setCartItems } = useContext(ShopContext);
+    const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
-    const getTotalItemPrice = (FEE) => {
+    const getTotalItemPrice = () => {
         return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
     };
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setCartItems(getDefaultCart())
+        setCart([]);
+        navigate("/thankyou");
+    };
+
+    useEffect(() => {
+        // If cart is empty, navigate to home
+        if (cart.length === 0) {
+            navigate('/');
+        }
+    }, [cart, navigate]);
+
     return (
         <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
-            <form action="#" className="mx-auto max-w-screen-xl px-4 2xl:px-0">
+            <form onSubmit={handleSubmit} className="mx-auto max-w-screen-xl px-4 2xl:px-0">
                 <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Checkout</h2>
                 <div className="mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-12 xl:gap-16">
                     <div className="min-w-0 flex-1 space-y-8">
@@ -232,13 +248,14 @@ const Checkout = () => {
                                             </ul>
                                         </div>
                                         <div className="relative w-full">
-                                            <input type="text" id="phone-input" className="z-20 block w-full rounded-e-lg border border-s-0 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:border-s-gray-700  dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required />
+                                            <input onChange={(e) => setUser(prevUser => ({ ...prevUser, phone: e.target.value }))} type="text" id="phone-input" className="z-20 block w-full rounded-e-lg border border-s-0 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:border-s-gray-700  dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required />
                                         </div>
                                     </div>
                                 </div>
                                 <div>
                                     <label htmlFor="your_name" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Your Address </label>
-                                    <input type="text" id="your_name" className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="Bonnie Green" required />
+                                    <input onChange={(e) => setUser(prevUser => ({ ...prevUser, address: e.target.value }))}
+                                        type="text" id="your_name" className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="Bonnie Green" required />
                                 </div>
                             </div>
                         </div>
@@ -248,7 +265,7 @@ const Checkout = () => {
                                 <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
                                     <div className="flex items-start">
                                         <div className="flex h-5 items-center">
-                                            <input id="pay-on-delivery" aria-describedby="pay-on-delivery-text" type="radio" name="payment-method" defaultValue className="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" />
+                                            <input checked="checked" id="pay-on-delivery" aria-describedby="pay-on-delivery-text" type="radio" name="payment-method" defaultValue className="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" required />
                                         </div>
                                         <div className="ms-4 text-sm">
                                             <label htmlFor="pay-on-delivery" className="font-medium leading-none text-gray-900 dark:text-white"> Payment on delivery </label>
@@ -264,7 +281,7 @@ const Checkout = () => {
                                 <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
                                     <div className="flex items-start">
                                         <div className="flex h-5 items-center">
-                                            <input id="fedex" aria-describedby="fedex-text" type="radio" name="delivery-method" defaultValue className="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" />
+                                            <input checked="checked" id="fedex" aria-describedby="fedex-text" type="radio" name="delivery-method" defaultValue className="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" />
                                         </div>
                                         <div className="ms-4 text-sm">
                                             <label htmlFor="fedex" className="font-medium leading-none text-gray-900 dark:text-white"> Free Delivery - FedEx </label>

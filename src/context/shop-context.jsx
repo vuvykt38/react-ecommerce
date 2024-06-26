@@ -50,7 +50,9 @@ export const ShopContextProvider = (props) => {
     getTotalCartAmount,
     checkout,
     cart,
-    setCart
+    setCart,
+    getDefaultCart,
+    setCartItems
   };
 
   return (
