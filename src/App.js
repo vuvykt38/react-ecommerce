@@ -7,6 +7,8 @@ import { Cart } from "./pages/cart/cart";
 import { ShopContextProvider } from "./context/shop-context";
 import { UserProvider } from "./context/user-context";
 import Checkout from "./pages/cart/checkout";
+import Order from "./pages/cart/order";
+import ProtectedRoute from "./components/protectedroute";
 
 function App() {
   return (
@@ -19,7 +21,8 @@ function App() {
               <Route path="/" element={<Shop />} />
               <Route path="/login" element={<Login />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/checkout" element={<ProtectedRoute element={<Checkout />} />} />
+              <Route path="/thankyou" element={<ProtectedRoute element={<Order />} />} />
             </Routes>
           </Router>
         </ShopContextProvider>

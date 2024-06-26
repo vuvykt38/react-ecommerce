@@ -2,11 +2,17 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../context/user-context";
+import { ShopContext } from '../context/shop-context';
 
 
 export const Login = () => {
   const { setUser } = useContext(UserContext);
+  const { cart } = useContext(ShopContext)
   const navigate = useNavigate();
+  
+  const navigateBasedOnCart = () => {
+    navigate(cart.length > 0 ? '/checkout' : '/');
+  };
 
   const loginWithServer = async (accessToken) => {
     try {
@@ -21,8 +27,7 @@ export const Login = () => {
       });
       setUser(response.data)
       console.log('User data set:', response.data);
-      navigate('/');
-
+      navigateBasedOnCart();
     } catch (error) {
       console.error('Error:', error);
     }
