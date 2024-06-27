@@ -4,7 +4,7 @@ import { UserContext } from '../../context/user-context';
 import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-    const { cart, setCart, getDefaultCart, setCartItems } = useContext(ShopContext);
+    const { cart, setCart } = useContext(ShopContext);
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
 
@@ -14,7 +14,6 @@ const Checkout = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        setCartItems(getDefaultCart())
         setCart([]);
         navigate("/thankyou");
     };

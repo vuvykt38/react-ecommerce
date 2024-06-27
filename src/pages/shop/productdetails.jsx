@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { PRODUCTS } from "../../products";
 import { useParams } from 'react-router-dom';
 import { useContext } from 'react';

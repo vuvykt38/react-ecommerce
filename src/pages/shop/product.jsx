@@ -12,7 +12,7 @@ export const Product = (props) => {
   return (
     <div className="product">
       <Link to={`/products/${id}`}>
-        <img src={productImage} />
+        <img src={productImage} alt={productName} />
         <div className="description">
           <p>
             <b>{productName}</b>
