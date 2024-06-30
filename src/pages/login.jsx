@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../context/user-context";
 import { ShopContext } from '../context/shop-context';
-
+import ReactPixel from 'react-facebook-pixel';
 
 export const Login = () => {
   const { setUser } = useContext(UserContext);
@@ -13,6 +13,12 @@ export const Login = () => {
   const navigateBasedOnCart = () => {
     navigate(cart.length > 0 ? '/checkout' : '/');
   };
+
+  const sendLogin = () => {
+    ReactPixel.track('Login', {
+      social_login: 'facebook'
+  });
+  }
 
   const loginWithServer = async (accessToken) => {
     try {
@@ -25,6 +31,7 @@ export const Login = () => {
           access_token: accessToken
         }
       });
+      sendLogin()
       setUser(response.data)
       console.log('User data set:', response.data);
       navigateBasedOnCart();

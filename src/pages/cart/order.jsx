@@ -1,8 +1,16 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
+import { ShopContext } from '../../context/shop-context';
 import { UserContext } from '../../context/user-context';
+import ReactPixel from 'react-facebook-pixel';
 
 const Order = () => {
     const { user } = useContext(UserContext)
+    const { order, checkout } = useContext(ShopContext)
+    
+    useEffect(() => {
+        ReactPixel.track('Purchase', order);
+        checkout()
+    }, []);
 
     return (
         <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">

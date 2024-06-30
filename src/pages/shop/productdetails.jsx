@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PRODUCTS } from "../../products";
 import { useParams } from 'react-router-dom';
 import { useContext } from 'react';
 import { ShopContext } from '../../context/shop-context';
+import ReactPixel from 'react-facebook-pixel';
 import "./shop.css";
 
 
@@ -12,6 +13,26 @@ const ProductPage = () => {
     const product = PRODUCTS.find(product => product.id === productId);
     const { addToCart, cartItems } = useContext(ShopContext)
     const cartItemCount = cartItems[productId];
+
+    const addToCartFb = () => {
+        ReactPixel.track('AddToCart', {
+            content_ids: [product.id],
+            content_name: product.productName,
+            content_type: 'product',
+            value: product.price,
+            currency: 'USD'
+        });
+    }
+
+    useEffect(() => {
+        ReactPixel.track('ViewContent', {
+            content_ids: [product.id],
+            content_name: product.productName,
+            content_type: 'product',
+            value: product.price,
+            currency: 'USD'
+        });
+    }, []);
 
     return (
         <div className="container mx-auto mt-40 flex justify-center items-start h-screen">
@@ -23,7 +44,10 @@ const ProductPage = () => {
                     <h2 className="text-2xl font-bold text-gray-800">{product.productName}</h2>
                     <p className="text-gray-600">${product.price}</p>
                     <p className="text-gray-700 mt-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam ex eveniet maxime architecto unde iste dolorum quae nemo temporibus ipsam sapiente, illum ipsa asperiores vero, corrupti earum. Iusto, voluptatibus nihil?</p>
-                    <button className="addToCartBttn" onClick={() => addToCart(productId)}>
+                    <button className="addToCartBttn" onClick={() => {
+                        addToCart(productId);
+                        addToCartFb();
+                    }}>
                         Add To Cart {cartItemCount > 0 && <> ({cartItemCount})</>}
                     </button>
                 </div>

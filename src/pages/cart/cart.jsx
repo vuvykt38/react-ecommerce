@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { ShopContext } from "../../context/shop-context";
 import { CartItem } from "./cart-item";
 import { useNavigate } from "react-router-dom";
+import ReactPixel from 'react-facebook-pixel';
 import "./cart.css";
 
 export const Cart = () => {
@@ -9,6 +10,16 @@ export const Cart = () => {
 
   const totalAmount = getTotalCartAmount();
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    ReactPixel.track('ViewCart', {
+      content_ids: cart.map(product => product.id),
+      content_type: 'product',
+      value: totalAmount,
+      currency: 'USD'
+    });
+  }, [totalAmount]);
 
   return (
     <div className="cart">
@@ -18,7 +29,7 @@ export const Cart = () => {
       <div className="cart">
         {cart.length > 0 ? (
           cart.map((item) => (
-            <CartItem data={item} />
+            <CartItem key={item.id} data={item} />
           ))
         ) : (''
         )}

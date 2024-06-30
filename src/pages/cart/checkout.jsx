@@ -2,11 +2,13 @@ import React, { useContext, useEffect } from 'react'
 import { ShopContext } from "../../context/shop-context";
 import { UserContext } from '../../context/user-context';
 import { useNavigate } from "react-router-dom";
+import ReactPixel from 'react-facebook-pixel';
 
 const Checkout = () => {
-    const { cart, setCart } = useContext(ShopContext);
+    const { cart, getTotalCartAmount, setOrder } = useContext(ShopContext);
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
+    const totalAmount = getTotalCartAmount();
 
     const getTotalItemPrice = () => {
         return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -14,9 +16,24 @@ const Checkout = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        setCart([]);
+        const order = {
+            value: totalAmount,
+            currency: 'USD',
+            contents: cart,
+            content_type: 'product'
+        }
+        setOrder(order)
         navigate("/thankyou");
     };
+
+    useEffect(() => {
+        ReactPixel.track('InitiateCheckout', {
+            content_ids: cart.map(product => product.id),
+            content_type: 'product',
+            value: totalAmount,
+            currency: 'USD'
+        });
+    }, []);
 
     useEffect(() => {
         // If cart is empty, navigate to home

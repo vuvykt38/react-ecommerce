@@ -10,6 +10,8 @@ import Checkout from "./pages/cart/checkout";
 import Order from "./pages/cart/order";
 import ProtectedRoute from "./components/protectedroute";
 import ProductPage from "./pages/shop/productdetails";
+import Analytics from "./components/analytics";
+
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
       <UserProvider>
         <ShopContextProvider>
           <Router>
+            <Analytics />
             <Navbar />
             <Routes>
               <Route path="/" element={<Shop />} />
@@ -27,7 +30,6 @@ function App() {
               <Route path="/products/:productId" element={<ProductPage />} />
             </Routes>
           </Router>
-
         </ShopContextProvider>
       </UserProvider>
     </div>
